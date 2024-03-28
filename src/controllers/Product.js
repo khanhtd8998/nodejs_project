@@ -1,99 +1,87 @@
+import { errorMessages, successMessages } from '../constants/message.js';
 import Product from '../models/ProductModel.js';
 const ProductController = {
-    getAll: async (req, res) => {
+    getAll: async (req, res, next) => {
         try {
             const data = await Product.find();
             if (data.length == 0) {
-                return res.status(400).json({ message: "Lay danh sach san pham that bai" });
+                return res.status(400).json({ message: errorMessages.NOT_FOUND });
             }
             return res.status(200).json({
-                message: "Lay danh sach san pham thanh cong",
+                message: successMessages.GET_PRODUCT_SUCCESS,
                 data: data
             });
 
         } catch (error) {
-            return res.status(500).json({
-                name: error.name,
-                message: error.message
-            });
+            next()
         }
     },
 
-    create: async (req, res) => {
+    create: async (req, res, next) => {
         try {
             const data = await Product.create(req.body);
             if (!data) {
-                return res.status(400).json({ message: "Them san pham that bai" });
+                return res.status(400).json({ message: errorMessages.CREATE_FAIL });
             }
             return res.status(200).json({
-                message: "Them san pham thanh cong",
+                message: successMessages.CREATE_PRODUCT_SUCCESS,
                 data: data
             });
 
         } catch (error) {
-            return res.status(500).json({
-                name: error.name,
-                message: error.message
-            });
+            next(error);
         }
     },
-    getDetail: async (req, res) => {
+    getDetail: async (req, res, next) => {
         try {
             const data = await Product.findById(req.params.id);
-            if (!data) {
-                return res.status(400).json({ message: "Lay san pham that bai" });
+            if (data) {
+                return res.status(200).json({
+                    message: successMessages.GET_PRODUCT_SUCCESS,
+                    data: data
+                });
             }
-            return res.status(200).json({
-                message: "Lay san pham thanh cong",
-                data: data
+            return res.status(400).json({
+                message: errorMessages.NOT_FOUND,
             });
-
         } catch (error) {
-            return res.status(500).json({
-                name: error.name,
-                message: error.message
-            });
+            next(error);
         }
     },
-    update: async (req, res) => {
+    update: async (req, res, next) => {
         try {
             const data = await Product.findByIdAndUpdate(req.params.id, req.body, {
                 new: true
             });
             if (!data) {
-                return res.status(400).json({ message: "Cap nhat san pham that bai" });
+                return res.status(400).json({ message: errorMessages.UPDATE_FAIL });
             }
             return res.status(200).json({
-                message: "Cap nhat san pham thanh cong",
+                message: successMessages.UPDATE_PRODUCT_SUCCESS,
                 data: data
             });
 
         } catch (error) {
-            return res.status(500).json({
-                name: error.name,
-                message: error.message
-            });
+            next(error)
         }
     },
-    remove: async (req, res) => {
+    remove: async (req, res, next) => {
         try {
             const data = await Product.findByIdAndDelete(req.params.id);
-            if (!data) {
-                return res.status(400).json({ message: "Xoa san pham that bai" });
+            if (data) {
+                return res.status(200).json({
+                    message: successMessages.DELETE_PRODUCT_SUCCESS,
+                    data: data
+                });
             }
-            return res.status(200).json({
-                message: "Xoa san pham thanh cong",
-                data: data
+            return res.status(404).json({
+                message: errorMessages.NOT_FOUND,
             });
-
         } catch (error) {
-            return res.status(500).json({
-                name: error.name,
-                message: error.message
-            });
+            next(error);
         }
     },
-    softRemove: async (req, res) => {
+    softRemove: async (req, res, next) => {
         try {
             const data = await Product.findByIdAndUpdate(req.params.id,
                 {
@@ -102,22 +90,21 @@ const ProductController = {
                 {
                     new: true
                 });
-            if (!data) {
-                return res.status(400).json({ message: "An san pham that bai" });
+            if (data) {
+                return res.status(200).json({
+                    message: "HIDE_PRODUCT_SUCCESS",
+                    data: data
+                });
             }
             return res.status(200).json({
-                message: "An san pham thanh cong",
-                data: data
+                message: errorMessages.DELETE_FAIL,
             });
 
         } catch (error) {
-            return res.status(500).json({
-                name: error.name,
-                message: error.message
-            });
+            next(error);
         }
     },
-    show: async (req, res) => {
+    show: async (req, res, next) => {
         try {
             const data = await Product.findByIdAndUpdate(req.params.id,
                 {
@@ -126,19 +113,18 @@ const ProductController = {
                 {
                     new: true
                 });
-            if (!data) {
-                return res.status(400).json({ message: "Hien san pham that bai" });
+            if (data) {
+                return res.status(200).json({
+                    message: "SHOW_PRODUCT_SUCCESS",
+                    data: data
+                });
             }
-            return res.status(200).json({
-                message: "Hien san pham thanh cong",
-                data: data
+            return res.status(404).json({
+                message: errorMessages.NOT_FOUND,
             });
 
         } catch (error) {
-            return res.status(500).json({
-                name: error.name,
-                message: error.message
-            });
+            next(error)
         }
     }
 }

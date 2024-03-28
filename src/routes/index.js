@@ -7,9 +7,9 @@ import authRouter from './auth.js';
 const router = express.Router();
 
 router.use('/products', productRouter)
-router.use('/users', userRouter)
 router.use('/categories', categoryRouter)
 router.use('/auth', authRouter)
 
+// router.use('/users', userRouter)
 export default router;
 

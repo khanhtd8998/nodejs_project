@@ -1,57 +1,51 @@
+import { errorMessages, successMessages } from '../constants/message.js';
 import Category from '../models/CategoryModel.js';
 const CategoryController = {
-    getAll: async(req, res) => {
+    getAll: async(req, res, next) => {
         try {
             const data = await Category.find();
             if (data.length == 0) {
-                return res.status(400).json({ message: "Lay danh sach danh muc that bai" });
+                return res.status(400).json({ message: errorMessages.NOT_FOUND });
             }
             return res.status(200).json({
-                message: "Lay danh sach danh muc thanh cong",
+                message: successMessages.GET_PRODUCT_SUCCESS,
                 data: data
             });
 
         } catch (error) {
-            return res.status(500).json({
-                name: error.name,
-                message: error.message
-            });
+            next(error)
         }
     },
 
-    create: async(req, res) => {
+    create: async(req, res, next) => {
         try {
             const data = await Category.create(req.body);
             if (!data) {
-                return res.status(400).json({ message: "Them danh muc that bai" });
+                return res.status(400).json({ message: errorMessages.CREATE_FAIL });
             }
             return res.status(200).json({
-                message: "Them danh muc thanh cong",
+                message: successMessages.CREATE_PRODUCT_SUCCESS,
                 data: data
             });
         } catch (error) {
-            return res.status(500).json({
-                name: error.name,
-                message: error.message
-            });
+            next(error)
         }
     },
-    getDetail: async(req, res) => {
+    getDetail: async(req, res, next) => {
         try {
             const data = await Category.findById(req.params.id);
-            if (!data) {
-                return res.status(400).json({ message: "Lay danh muc that bai" });
+            if (data) {
+                return res.status(200).json({
+                    message: successMessages.GET_PRODUCT_SUCCESS,
+                    data: data
+                });
             }
-            return res.status(200).json({
-                message: "Lay danh muc thanh cong",
-                data: data
+            return res.status(400).json({
+                message: errorMessages.NOT_FOUND,
             });
 
         } catch (error) {
-            return res.status(500).json({
-                name: error.name,
-                message: error.message
-            });
+            next(error)
         }
     },
     update: async(req, res) => {
@@ -60,10 +54,10 @@ const CategoryController = {
                 new: true
             });
             if (!data) {
-                return res.status(400).json({ message: "Cap nhat danh muc that bai" });
+                return res.status(400).json({ message: errorMessages.UPDATE_FAIL });
             }
             return res.status(200).json({
-                message: "Cap nhat danh muc thanh cong",
+                message: successMessages.UPDATE_PRODUCT_SUCCESS,
                 data: data
             });
 
@@ -77,41 +71,37 @@ const CategoryController = {
     remove: async(req, res) => {
         try {
             const data = await Category.findByIdAndDelete(req.params.id);
-            if (!data) {
-                return res.status(400).json({ message: "Xoa danh muc that bai" });
+            if (data) {
+                return res.status(200).json({
+                    message: successMessages.DELETE_PRODUCT_SUCCESS,
+                    data: data
+                });
             }
-            return res.status(200).json({
-                message: "Xoa danh muc thanh cong",
-                data: data
+            return res.status(404).json({
+                message: errorMessages.NOT_FOUND,
             });
-
         } catch (error) {
-            return res.status(500).json({
-                name: error.name,
-                message: error.message
-            });
+            next(error)
         }
     },
-    softRemove: async(req, res) => {
+    softRemove: async(req, res, next) => {
         try {
             const data = await Category.findByIdAndUpdate(req.params.id, {
                 hide: true,
             }, {
                 new: true
             });
-            if (!data) {
-                return res.status(400).json({ message: "An danh muc that bai" });
+            if (data) {
+                return res.status(200).json({
+                    message: "HIDE_PRODUCT_SUCCESS",
+                    data: data
+                });
             }
             return res.status(200).json({
-                message: "An danh muc thanh cong",
-                data: data
+                message: errorMessages.DELETE_FAIL,
             });
-
         } catch (error) {
-            return res.status(500).json({
-                name: error.name,
-                message: error.message
-            });
+            next(error)
         }
     },
     show: async(req, res) => {
@@ -121,12 +111,14 @@ const CategoryController = {
             }, {
                 new: true
             });
-            if (!data) {
-                return res.status(400).json({ message: "Hien danh muc that bai" });
+            if (data) {
+                return res.status(200).json({
+                    message: "SHOW_PRODUCT_SUCCESS",
+                    data: data
+                });
             }
-            return res.status(200).json({
-                message: "Hien danh muc thanh cong",
-                data: data
+            return res.status(404).json({
+                message: errorMessages.NOT_FOUND,
             });
 
         } catch (error) {

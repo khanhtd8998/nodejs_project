@@ -1,38 +1,62 @@
 import User from '../models/UserModel.js'
 import bcryptjs from 'bcryptjs'
-import { registerSchema } from '../validations/auth.js';
+import { registerSchema, loginSchema } from '../validations/auth.js';
+import { validAuth } from '../../ultils/validAuth.js';
+import  jwt  from 'jsonwebtoken';
+import dotenv from 'dotenv'
+import { errorMessages, successMessages } from '../constants/message.js';
 const AuthController = {
-    register: async(req, res) => {
+    register: async (req, res, next) => {
         try {
             //Kiểm tra dữ liệu đầu vào
             const { email, password } = req.body;
-            const { error } = registerSchema.validate(req.body, { abortEarly: false });
-            if (error) {
-                const errors = error.details.map(err => err.message)
-                return res.status(400).json({ message: errors })
-
-            }
+            validAuth(req.body, registerSchema)
             //Kiểm tra email đã tồn tại hay chưa
             const checkEmail = await User.findOne({ email })
-            if (checkEmail) return res.status(400).json({ message: "Email đã tồn tại" })
-                //Mã hóa mật khẩu
+            if (checkEmail) return res.status(400).json({ message: errorMessages.INVALID_EMAIL })
+            //Mã hóa mật khẩu
             const salt = await bcryptjs.genSalt(10)
             const hashPassword = await bcryptjs.hash(password, salt)
-                //Tạo user mới
-            const user = await User.create({...req.body, password: hashPassword })
+            //Tạo user mới
+            const user = await User.create({ ...req.body, password: hashPassword })
             user.password = undefined;
             if (!user) return res.status(400).json({
-                message: "Đăng ký tài khoản thất bại"
+                message: errorMessages.REGISTER_FALL
             });
             return res.status(201).json({
-                message: "Đăng ký tài khoản thành công",
+                message: successMessages.REGISTER_SUCCESS,
                 user
             })
         } catch (error) {
-            return res.status(500).json({
-                name: error.name,
-                message: error.message
+            next(error)
+        }
+    },
+    login: async (req, res, next) => {
+        try {
+            //Kiểm tra dữ liệu đầu vào
+            const { email, password } = req.body;
+            validAuth(req.body, loginSchema)
+            //Kiểm tra email đã tồn tại hay chưa
+            const user = await User.findOne({ email })
+            if (!user) return res.status(400).json({ message: errorMessages.INVALID_EMAIL })
+            //Kiểm tra password
+            const checkPassword = await bcryptjs.compare(password, user.password)
+            if(!checkPassword) return res.status(400).json({ message: errorMessages.INVALID_PASSWORD})
+            //Tạo token -> JWT
+            const token = jwt.sign({ id: user._id}, process.env.DB_URI ,{ expiresIn: "1h"})
+            //Tra token cho client
+            user.password = undefined;
+            return res.status(200).json({
+                message: successMessages.LOGIN_SUCCESS,
+                data:{
+                    user,
+                    token,
+                }
             })
+
+
+        } catch (error) {
+            next(error);
         }
     }
 }

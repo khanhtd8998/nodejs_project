@@ -1,14 +1,17 @@
 import express from "express"
 import router from "./src/routes/index.js"
 import mongoose from "mongoose"
-
+import { errorHandler, errorHandlerNotFound } from "./ultils/errorHanlde.js"
+import dotenv from 'dotenv'
+dotenv.config()
 const app = express()
-const PORT = 8000
+const PORT = process.env.PORT || 3000
+const DB_URI = process.env.DB_URI
 try {
     mongoose
-        .connect("mongodb://127.0.0.1:27017/nodejs_tutor_hoangnm")
+        .connect(DB_URI)
         .then(() => {
-            console.log("Connected to MongoDB nodejs_tutor_hoangnm");
+            console.log("Connected to MongoDB successfully");
         })
 } catch (error) {
     console.log("Connected failed: " + error);
@@ -18,6 +21,7 @@ try {
 app.use(express.json())
 app.use('/api', router)
 
+app.use(errorHandlerNotFound, errorHandler)
 
 app.listen(PORT, () => {
     console.log(`Server app listening on port ${PORT}`)
