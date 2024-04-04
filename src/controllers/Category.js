@@ -8,7 +8,7 @@ const CategoryController = {
                 return res.status(400).json({ message: errorMessages.NOT_FOUND });
             }
             return res.status(200).json({
-                message: successMessages.GET_PRODUCT_SUCCESS,
+                message: successMessages.GET_DATA_SUCCESS,
                 data: data
             });
 
@@ -24,7 +24,7 @@ const CategoryController = {
                 return res.status(400).json({ message: errorMessages.CREATE_FAIL });
             }
             return res.status(200).json({
-                message: successMessages.CREATE_PRODUCT_SUCCESS,
+                message: successMessages.CREATE_DATA_SUCCESS,
                 data: data
             });
         } catch (error) {
@@ -36,7 +36,7 @@ const CategoryController = {
             const data = await Category.findById(req.params.id);
             if (data) {
                 return res.status(200).json({
-                    message: successMessages.GET_PRODUCT_SUCCESS,
+                    message: successMessages.GET_DATA_SUCCESS,
                     data: data
                 });
             }
@@ -57,7 +57,7 @@ const CategoryController = {
                 return res.status(400).json({ message: errorMessages.UPDATE_FAIL });
             }
             return res.status(200).json({
-                message: successMessages.UPDATE_PRODUCT_SUCCESS,
+                message: successMessages.UPDATE_DATA_SUCCESS,
                 data: data
             });
 
@@ -73,7 +73,7 @@ const CategoryController = {
             const data = await Category.findByIdAndDelete(req.params.id);
             if (data) {
                 return res.status(200).json({
-                    message: successMessages.DELETE_PRODUCT_SUCCESS,
+                    message: successMessages.DELETE_DATA_SUCCESS,
                     data: data
                 });
             }
@@ -93,7 +93,7 @@ const CategoryController = {
             });
             if (data) {
                 return res.status(200).json({
-                    message: "HIDE_PRODUCT_SUCCESS",
+                    message: "HIDE_DATA_SUCCESS",
                     data: data
                 });
             }
@@ -113,7 +113,7 @@ const CategoryController = {
             });
             if (data) {
                 return res.status(200).json({
-                    message: "SHOW_PRODUCT_SUCCESS",
+                    message: "SHOW_DATA_SUCCESS",
                     data: data
                 });
             }

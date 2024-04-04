@@ -10,6 +10,6 @@ router.use('/products', productRouter)
 router.use('/categories', categoryRouter)
 router.use('/auth', authRouter)
 
-// router.use('/users', userRouter)
+router.use('/users', userRouter)
 export default router;
 

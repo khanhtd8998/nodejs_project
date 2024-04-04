@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+
+import mongoose, { Schema } from "mongoose";
 
 const CategorySchema = new mongoose.Schema({
     name: {
@@ -8,7 +9,20 @@ const CategorySchema = new mongoose.Schema({
     slug: {
         type: String,
         required: true,
-    }
+    },
+    description: {
+        type: String,
+        required: true,
+    },
+    hide: {
+        type: Boolean,
+        default: false,
+    },
+    products: [
+        {type: Schema.Types.ObjectId},
+        { ref: 'Product'}
+    ]
+
 }, {
     versionKey: false,
     timestamps: true,
