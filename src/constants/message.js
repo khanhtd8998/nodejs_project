@@ -1,7 +1,7 @@
 export const errorMessages = Object.freeze({
   INVALID_EMAIL: "Invalid email",
   INVALID_PASSWORD: "Invalid password",
-  INVALID_BODY_REQUEST: "Invalid body request!",
+  INVALID_BODY_REQUEST: "Invalid body request",
   EMAIL_EXISTED: "Email already exists",
   NOT_FOUND: "Not found",
   ERROR_SERVER: "Server error",
