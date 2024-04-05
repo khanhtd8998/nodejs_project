@@ -1,9 +1,10 @@
 import { errorMessages, successMessages } from '../constants/message.js';
+import Category from '../models/CategoryModel.js';
 import Product from '../models/ProductModel.js';
 const productController = {
     getAll: async (req, res, next) => {
         try {
-            const data = await Product.find();
+            const data = await Product.find().populate('category');
             if (data.length == 0) {
                 return res.status(400).json({ message: errorMessages.NOT_FOUND });
             }
@@ -16,25 +17,9 @@ const productController = {
             next()
         }
     },
-
-    create: async (req, res, next) => {
-        try {
-            const data = await Product.create(req.body);
-            if (!data) {
-                return res.status(400).json({ message: errorMessages.CREATE_FAIL });
-            }
-            return res.status(200).json({
-                message: successMessages.CREATE_DATA_SUCCESS,
-                data: data
-            });
-
-        } catch (error) {
-            next(error);
-        }
-    },
     getDetail: async (req, res, next) => {
         try {
-            const data = await Product.findById(req.params.id);
+            const data = await Product.findById(req.params.id).populate('category');
             if (data) {
                 return res.status(200).json({
                     message: successMessages.GET_DATA_SUCCESS,
@@ -48,12 +33,34 @@ const productController = {
             next(error);
         }
     },
+    create: async (req, res, next) => {
+        try {
+            const data = await Product.create(req.body);
+            const updateCategory = await Category.findByIdAndUpdate(data.category, {
+                $push: { products: data._id }
+            }, { new: true })
+            if (!data || !updateCategory) {
+                return res.status(400).json({ message: errorMessages.CREATE_FAIL });
+            }
+            return res.status(200).json({
+                message: successMessages.CREATE_DATA_SUCCESS,
+                data: data
+            });
+
+        } catch (error) {
+            next(error);
+        }
+    },
+
     update: async (req, res, next) => {
         try {
             const data = await Product.findByIdAndUpdate(req.params.id, req.body, {
                 new: true
             });
-            if (!data) {
+            const updateCategory = await Category.findByIdAndUpdate(data.category, {
+                $push: { products: data._id }
+            }, { new: true })
+            if (!data || !updateCategory) {
                 return res.status(400).json({ message: errorMessages.UPDATE_FAIL });
             }
             return res.status(200).json({

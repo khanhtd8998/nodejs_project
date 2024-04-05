@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 connect()
-app.use('/api', router)
+app.use('/', router)
 app.use(errorHandlerNotFound, errorHandler);
 
 app.listen(PORT, () => {

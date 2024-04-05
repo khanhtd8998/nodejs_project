@@ -1,9 +1,9 @@
 import { errorMessages, successMessages } from '../constants/message.js';
 import Category from '../models/CategoryModel.js';
 const CategoryController = {
-    getAll: async(req, res, next) => {
+    getAll: async (req, res, next) => {
         try {
-            const data = await Category.find();
+            const data = await Category.find().populate('products');
             if (data.length == 0) {
                 return res.status(400).json({ message: errorMessages.NOT_FOUND });
             }
@@ -16,24 +16,9 @@ const CategoryController = {
             next(error)
         }
     },
-
-    create: async(req, res, next) => {
+    getDetail: async (req, res, next) => {
         try {
-            const data = await Category.create(req.body);
-            if (!data) {
-                return res.status(400).json({ message: errorMessages.CREATE_FAIL });
-            }
-            return res.status(200).json({
-                message: successMessages.CREATE_DATA_SUCCESS,
-                data: data
-            });
-        } catch (error) {
-            next(error)
-        }
-    },
-    getDetail: async(req, res, next) => {
-        try {
-            const data = await Category.findById(req.params.id);
+            const data = await Category.findById(req.params.id).populate('products');
             if (data) {
                 return res.status(200).json({
                     message: successMessages.GET_DATA_SUCCESS,
@@ -48,7 +33,22 @@ const CategoryController = {
             next(error)
         }
     },
-    update: async(req, res) => {
+    create: async (req, res, next) => {
+        try {
+            const data = await Category.create(req.body);
+            if (!data) {
+                return res.status(400).json({ message: errorMessages.CREATE_FAIL });
+            }
+            return res.status(200).json({
+                message: successMessages.CREATE_DATA_SUCCESS,
+                data: data
+            });
+        } catch (error) {
+            next(error)
+        }
+    },
+
+    update: async (req, res) => {
         try {
             const data = await Category.findByIdAndUpdate(req.params.id, req.body, {
                 new: true
@@ -68,9 +68,12 @@ const CategoryController = {
             });
         }
     },
-    remove: async(req, res) => {
+    remove: async (req, res) => {
         try {
             const data = await Category.findByIdAndDelete(req.params.id);
+            if (req.params.id === "660ff7d29305fb9669b05844") {
+                return res.status(400).json({ message: errorMessages.DELETE_FAIL });
+            }
             if (data) {
                 return res.status(200).json({
                     message: successMessages.DELETE_DATA_SUCCESS,
@@ -84,7 +87,7 @@ const CategoryController = {
             next(error)
         }
     },
-    softRemove: async(req, res, next) => {
+    softRemove: async (req, res, next) => {
         try {
             const data = await Category.findByIdAndUpdate(req.params.id, {
                 hide: true,
@@ -104,7 +107,7 @@ const CategoryController = {
             next(error)
         }
     },
-    show: async(req, res) => {
+    show: async (req, res) => {
         try {
             const data = await Category.findByIdAndUpdate(req.params.id, {
                 hide: false,
