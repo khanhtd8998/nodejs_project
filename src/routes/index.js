@@ -9,7 +9,9 @@ const router = express.Router();
 router.use('/products', productRouter)
 router.use('/categories', categoryRouter)
 router.use('/auth', authRouter)
-
 router.use('/users', userRouter)
+router.get('/', (req, res) => {
+    res.send('Hi guy, Welcome to the world')
+})
 export default router;
 
