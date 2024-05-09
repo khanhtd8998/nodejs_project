@@ -6,6 +6,7 @@ import { PORT } from "./src/ultils/env.js";
 
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
