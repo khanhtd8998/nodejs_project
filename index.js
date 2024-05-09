@@ -3,6 +3,7 @@ import router from "./src/routes/index.js"
 import connect  from "./src/ultils/connect.js"
 import { errorHandler, errorHandlerNotFound } from "./src/ultils/errorHanlder.js"
 import { PORT } from "./src/ultils/env.js";
+import cors from 'cors'
 
 
 const app = express();
