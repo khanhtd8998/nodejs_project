@@ -4,7 +4,7 @@ import checkPermission from '../middlewares/checkPermission.js';
 import validBodyRequest from '../middlewares/validRequestBody.js';
 import { registerSchema } from '../validations/auth.js';
 const userRouter = express.Router();
-userRouter.use(checkPermission)
+// userRouter.use(checkPermission)
 userRouter.get('/', UserController.getAll);
 userRouter.get('/:id', UserController.getDetail)
 userRouter.put('/hide/:id', UserController.softRemove)

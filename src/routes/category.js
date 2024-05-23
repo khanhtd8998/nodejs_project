@@ -7,7 +7,7 @@ const categoryRouter = express.Router();
 
 categoryRouter.get('/', CategoryController.getAll);
 categoryRouter.get('/:id', CategoryController.getDetail)
-categoryRouter.use(checkPermission)
+// categoryRouter.use(checkPermission)
 categoryRouter.use(validBodyRequest(CategorytSchema))
 categoryRouter.put('/hide/:id', CategoryController.softRemove)
 categoryRouter.put('/show/:id', CategoryController.show)

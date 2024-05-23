@@ -6,7 +6,8 @@ import checkPermission from '../middlewares/checkPermission.js';
 const productRouter = express.Router();
 productRouter.get('/', ProductController.getAll);
 productRouter.get('/:id', ProductController.getDetail)
-productRouter.use(checkPermission)
+
+// productRouter.use(checkPermission)
 productRouter.use(validBodyRequest(ProductSchema))
 productRouter.put('/hide/:id', ProductController.softRemove)
 productRouter.put('/show/:id', ProductController.show)

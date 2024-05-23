@@ -3,7 +3,10 @@ import Category from '../models/CategoryModel.js';
 const CategoryController = {
     getAll: async (req, res, next) => {
         try {
-            const data = await Category.find().populate('products');
+            const search = req.query.name || ""
+            const data = await Category.find({
+                name: { $regex: String(search), $options: 'i' }
+            });
             if (data.length == 0) {
                 return res.status(400).json({ message: errorMessages.NOT_FOUND });
             }
@@ -18,7 +21,7 @@ const CategoryController = {
     },
     getDetail: async (req, res, next) => {
         try {
-            const data = await Category.findById(req.params.id).populate('products');
+            const data = await Category.findById(req.params.id);
             if (data) {
                 return res.status(200).json({
                     message: successMessages.GET_DATA_SUCCESS,
@@ -70,8 +73,9 @@ const CategoryController = {
     },
     remove: async (req, res) => {
         try {
+
             const data = await Category.findByIdAndDelete(req.params.id);
-            if (req.params.id === "660ff7d29305fb9669b05844") {
+            if (req.params.id === "661000f9bd1c5ba9e8d528d8") {
                 return res.status(400).json({ message: errorMessages.DELETE_FAIL });
             }
             if (data) {

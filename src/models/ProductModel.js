@@ -5,6 +5,7 @@ const productSchema = new mongoose.Schema(
         name: {
             type: String,
             required: true,
+            // text: true
         },
         price: {
             type: Number,
@@ -38,6 +39,10 @@ const productSchema = new mongoose.Schema(
         brand: {
             type: String,
             default: "No brand",
+        },
+        image: {
+            type: String,
+            default: "https://vimexpo.com.vn/wp-content/uploads/2020/11/4900_anh_chua_cap_nhat.jpg",
         },
     },
     {
