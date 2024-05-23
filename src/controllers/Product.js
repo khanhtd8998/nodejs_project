@@ -48,10 +48,10 @@ const productController = {
     create: async (req, res, next) => {
         try {
             const data = await Product.create(req.body);
-            const updateCategory = await Category.findByIdAndUpdate(data.category, {
-                $push: { products: data._id }
-            }, { new: true })
-            if (!data || !updateCategory) {
+            // const updateCategory = await Category.findByIdAndUpdate(data.category, {
+            //     $push: { products: data._id }
+            // }, { new: true })
+            if (!data) {
                 return res.status(400).json({ message: errorMessages.CREATE_FAIL });
             }
             return res.status(200).json({
