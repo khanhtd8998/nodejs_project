@@ -7,11 +7,11 @@ const categoryRouter = express.Router();
 
 categoryRouter.get('/', CategoryController.getAll);
 categoryRouter.get('/:id', CategoryController.getDetail)
+categoryRouter.delete('/:id', CategoryController.remove)
 // categoryRouter.use(checkPermission)
 categoryRouter.use(validBodyRequest(CategorytSchema))
 categoryRouter.put('/hide/:id', CategoryController.softRemove)
 categoryRouter.put('/show/:id', CategoryController.show)
-categoryRouter.delete('/:id', CategoryController.remove)
 categoryRouter.post('/', CategoryController.create)
 categoryRouter.put('/:id', CategoryController.update)
 
