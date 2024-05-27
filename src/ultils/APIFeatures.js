@@ -14,10 +14,7 @@ class APIFeatures {
         queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
         const parsedQuery = JSON.parse(queryStr);
         if (parsedQuery.name) {
-            this.query = this.query.find({ $text: { $search: parsedQuery.name } });
-            delete parsedQuery.name;
-        } else {
-            this.query = this.query.find(parsedQuery);
+            parsedQuery.name = new RegExp(parsedQuery.name, 'i');
         }
         const regexFields = ['description', 'brand'];
         regexFields.forEach(field => {
