@@ -74,10 +74,10 @@ const CategoryController = {
     remove: async (req, res) => {
         try {
 
-            const data = await Category.findByIdAndDelete(req.params.id);
-            if (req.params.id === "661000f9bd1c5ba9e8d528d8") {
+            if (req.params.id == "665c798925cc6c92c961c8ae") {
                 return res.status(400).json({ message: errorMessages.DELETE_FAIL });
             }
+            const data = await Category.findByIdAndDelete(req.params.id);
             if (data) {
                 return res.status(200).json({
                     message: successMessages.DELETE_DATA_SUCCESS,
