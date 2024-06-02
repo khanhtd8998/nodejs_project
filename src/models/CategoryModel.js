@@ -18,6 +18,10 @@ const CategorySchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    image: {
+        type: String,
+        default: "https://vimexpo.com.vn/wp-content/uploads/2020/11/4900_anh_chua_cap_nhat.jpg",
+    },
     // products: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
 
 }, {
