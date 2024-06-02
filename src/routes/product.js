@@ -7,7 +7,7 @@ const productRouter = express.Router();
 productRouter.get('/', ProductController.getAll);
 productRouter.get('/:id', ProductController.getDetail)
 
-productRouter.use(checkPermission())
+productRouter.use(checkPermission)
 productRouter.delete('/:id', ProductController.remove)
 productRouter.use(validBodyRequest(ProductSchema))
 productRouter.put('/hide/:id', ProductController.softRemove)
