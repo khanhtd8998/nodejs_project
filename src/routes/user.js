@@ -10,7 +10,7 @@ userRouter.get('/:id', UserController.getDetail)
 userRouter.put('/hide/:id', UserController.softRemove)
 userRouter.put('/show/:id', UserController.show)
 userRouter.delete('/:id', UserController.remove)
-userRouter.use(validBodyRequest(registerSchema))
+// userRouter.use(validBodyRequest(registerSchema))
 userRouter.post('/', UserController.create)
 userRouter.put('/:id', UserController.update)
 
