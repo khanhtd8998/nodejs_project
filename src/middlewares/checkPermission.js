@@ -17,6 +17,7 @@ const checkPermission = async (req, res, next) => {
               message: errorMessages.PERMISSION_DENIED || "Permission denied!",
             });
           }
+        user.password = undefined
         req.user = user;
         next()
     } catch (error) {

@@ -1,5 +1,4 @@
 import { errorMessages, successMessages } from '../constants/message.js';
-import Category from '../models/CategoryModel.js';
 import Product from '../models/ProductModel.js';
 import APIFeatures from '../ultils/APIFeatures.js';
 const productController = {

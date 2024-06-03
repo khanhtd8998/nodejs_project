@@ -1,11 +1,10 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const productSchema = new mongoose.Schema(
     {
         name: {
             type: String,
             required: true,
-            // text: true
         },
         price: {
             type: Number,
@@ -44,6 +43,12 @@ const productSchema = new mongoose.Schema(
             type: String,
             default: "https://vimexpo.com.vn/wp-content/uploads/2020/11/4900_anh_chua_cap_nhat.jpg",
         },
+        startAt: Date,
+        endAt: Date,
+        bids: {
+            type: [Schema.Types.ObjectId],
+            ref: 'Bid',
+        }
     },
     {
         versionKey: false,

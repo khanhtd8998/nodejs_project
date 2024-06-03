@@ -35,14 +35,12 @@ const AuthController = {
                 return res.status(400).json({ message: errorMessages.INVALID_PASSWORD });
             }
             
-            const token = generateToken({_id: user.id}, "10d")
+            const token = generateToken({_id: user._id}, "10d")
             user.password = undefined;
             return res.status(200).json({
                 message: successMessages.LOGIN_SUCCESS,
-                data: {
-                    user,
-                    token,
-                }
+                token,
+                data: user
             })
         } catch (error) {
             next(error);
