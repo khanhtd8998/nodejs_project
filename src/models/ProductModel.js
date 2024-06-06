@@ -43,8 +43,9 @@ const productSchema = new mongoose.Schema(
             type: String,
             default: "https://vimexpo.com.vn/wp-content/uploads/2020/11/4900_anh_chua_cap_nhat.jpg",
         },
-        startAt: Date,
-        endAt: Date,
+        startAt: { type: Date },
+        endAt: { type: Date },
+        bidTime: { type: Number },
         bids: {
             type: [Schema.Types.ObjectId],
             ref: 'Bid',

@@ -30,7 +30,15 @@ const productController = {
     },
     getDetail: async (req, res, next) => {
         try {
-            const data = await Product.findById(req.params.id).populate('category');
+            const data = await Product.findById(req.params.id).populate('category').populate({
+                path: 'bids',
+                model: "Bid",
+                populate: {
+                    path: "user",
+                    model: "User",
+                    select: "email username"
+                }
+            })
             if (data) {
                 return res.status(200).json({
                     message: successMessages.GET_DATA_SUCCESS,
@@ -46,10 +54,9 @@ const productController = {
     },
     create: async (req, res, next) => {
         try {
+            const endAtTime = new Date(req.body.startAt).getTime() + req.body.bidTime * 60 * 1000;
             const data = await Product.create(req.body);
-            // const updateCategory = await Category.findByIdAndUpdate(data.category, {
-            //     $push: { products: data._id }
-            // }, { new: true })
+
             if (!data) {
                 return res.status(400).json({ message: errorMessages.CREATE_FAIL });
             }

@@ -6,6 +6,9 @@ const UserController = {
             if (data.length == 0) {
                 return res.status(400).json({ message: "Lay danh sach nguoi dung that bai" });
             }
+            data.map(user => {
+                user.password = undefined
+            })
             return res.status(200).json({
                 message: "Lay danh sach nguoi dung thanh cong",
                 data: data
@@ -45,9 +48,10 @@ const UserController = {
             if (!data) {
                 return res.status(400).json({ message: "Lay nguoi dung that bai" });
             }
+            data.password = undefined
             return res.status(200).json({
                 message: "Lay nguoi dung thanh cong",
-                data: data
+                data
             });
 
         } catch (error) {
