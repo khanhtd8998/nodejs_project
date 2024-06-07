@@ -11,4 +11,7 @@ export const ProductSchema = new joi.object({
     brand: joi.string().min(3).max(255),
     category: joi.string().min(3).max(255),
     image: joi.string(),
+    bidTime: joi.number().allow(null, ''),
+    startAt: joi.date().allow(null, ''),
+    endAt: joi.date().allow(null, '')
 })

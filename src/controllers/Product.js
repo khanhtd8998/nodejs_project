@@ -54,8 +54,16 @@ const productController = {
     },
     create: async (req, res, next) => {
         try {
-            const endAtTime = new Date(req.body.startAt).getTime() + req.body.bidTime * 60 * 1000;
-            const data = await Product.create(req.body);
+            const { startAt, bidTime } = req.body;
+            let endAtTime = null;
+    
+            if (startAt && bidTime) {
+                endAtTime = new Date(startAt).getTime() + bidTime * 60 * 1000;
+            }
+            const data = await Product.create({
+                ...req.body,
+                endAt: endAtTime ? new Date(endAtTime) : undefined,
+            });
 
             if (!data) {
                 return res.status(400).json({ message: errorMessages.CREATE_FAIL });
